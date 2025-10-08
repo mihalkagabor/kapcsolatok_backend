@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/kapcsolat
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate  # Flyway végzi a migrációkat
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  application:
+    name: kapcsolat_backend
+
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://localhost:5432/kapcsolat
+    user: postgres
+    password: postgres
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    # a baseline-on-migrate hasznos, ha már van létező adatbázisod
+
+app:
+  jwt:
+    secret: "EzEgyNagyonHosszúTitkosKulcsAminekLegalabb32ByteHosszaVan1234"
+    expirationMs: 36000000
+    refreshExpirationMs: 86400000
