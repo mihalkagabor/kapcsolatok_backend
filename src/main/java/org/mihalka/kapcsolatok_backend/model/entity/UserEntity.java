@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -24,5 +27,8 @@ public class UserEntity {
     @NotBlank(message = "A szerepkör nem lehet üres")
     @Column(name = "role", nullable = false)
     private String role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RefreshTokenEntity> refreshToken = new ArrayList<>();
 
 }
