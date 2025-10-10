@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.mihalka.kapcsolatok_backend.model.dto.AdressCreateDTO;
 
 @Entity
 @Data
@@ -36,5 +37,13 @@ public class AdressEntity {
     @ManyToOne
     @JoinColumn(name = "contact_id", nullable = false)
     private ContactEntity contact;
+
+    public AdressEntity(AdressCreateDTO dto, ContactEntity contact){
+        this.zipCode=dto.getZipCode();
+        this.city=dto.getCity();
+        this.street=dto.getStreet();
+        this.houseNumber=dto.getHouseNumber();
+        this.contact=contact;
+    }
 }
 
