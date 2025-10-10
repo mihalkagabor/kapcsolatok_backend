@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.mihalka.kapcsolatok_backend.model.dto.ContactCreateDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -56,5 +57,15 @@ public class ContactEntity {
     // Kapcsolat a telefonszámokkal
     @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PhoneNumberEntity> phoneNumbers = new ArrayList<>();
+
+    public ContactEntity(ContactCreateDTO dto,UserEntity user){
+        this.name=dto.getName();
+        this.birthDate=dto.getBirthDate();
+        this.motherName=dto.getMotherName();
+        this.tajNumber=dto.getTajNumber();
+        this.taxNumber=dto.getTaxNumber();
+        this.email=dto.getEmail();
+        this.user=user;
+    }
 
 }
