@@ -35,12 +35,19 @@ public class UserService {
         }
         Long userNumber=repository.count();
         UserEntity user=new UserEntity(dto);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
+            user.setRole(UserRole.valueOf(dto.getRole()));
+        }else {
+            user.setRole(UserRole.USER);
+        }
         if(userNumber ==0){
             user.setRole(UserRole.ADMIN);
         }
         user.setPasswordHash(passwordEncoder.encode(dto.getPasswordHash()));
         repository.save(user);
-
     }
 
     public List<UserListDTO> list() {
@@ -51,7 +58,6 @@ public class UserService {
     }
 
     public void modify(UserModifyDTO dto){
-        System.out.println("Servicebe lépés");
         if(repository.findByUserName(dto.getUserName()).isEmpty()){
             throw new IllegalArgumentException("Ez a felhasználó név nem létezik.");
         }

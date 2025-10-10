@@ -2,6 +2,7 @@ package org.mihalka.kapcsolatok_backend.config;
 
 
 import lombok.RequiredArgsConstructor;
+import org.mihalka.kapcsolatok_backend.sercurity.JwtAuthFilter;
 import org.mihalka.kapcsolatok_backend.sercurity.JwtAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +26,8 @@ public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final UserDetailsService userDetailsService;
+    private final JwtAuthFilter jwtAuthFilter; // inject
+
 
     /**
      * Jelszó titkosító bean
@@ -69,6 +73,7 @@ public class SecurityConfig {
                 // Minden kéréshez hozzáférés szabályok
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()   // login, register engedélyezve
+                        .requestMatchers("/api/user/create").permitAll()   // login, register engedélyezve
                         .anyRequest().authenticated()                  // minden más csak bejelentkezve
                 )
 
@@ -79,6 +84,7 @@ public class SecurityConfig {
 
                 // AuthenticationProvider beállítása
                 .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // <<< ide!
 
                 .build();
     }
