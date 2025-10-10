@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.mihalka.kapcsolatok_backend.model.dto.UserCreateDTO;
 import org.mihalka.kapcsolatok_backend.model.enums.UserRole;
 
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ public class UserEntity {
     private String passwordHash;
 
     // Szerepkör (ADMIN / USER)
-    @NotBlank(message = "A szerepkör nem lehet üres")
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
@@ -37,4 +37,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RefreshTokenEntity> refreshToken = new ArrayList<>();
 
+    public UserEntity(UserCreateDTO dto) {
+        this.userName=dto.getUserName();
+        this.passwordHash=dto.getPasswordHash();
+        this.role= UserRole.valueOf(dto.getRole());
+    }
 }
