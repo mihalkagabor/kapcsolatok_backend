@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.mihalka.kapcsolatok_backend.model.dto.PhoneNumberCreateDTO;
 import org.yaml.snakeyaml.events.Event;
 
 @Entity
@@ -28,4 +29,10 @@ public class PhoneNumberEntity {
     @ManyToOne
     @JoinColumn(name = "contact_id", nullable = false)
     private ContactEntity contact;
+
+    public PhoneNumberEntity(PhoneNumberCreateDTO dto, ContactEntity contact) {
+        this.phoneNumber=dto.getPhoneNumber();
+        this.type=dto.getType();
+        this.contact=contact;
+    }
 }
