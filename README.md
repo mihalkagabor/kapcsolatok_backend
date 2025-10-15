@@ -44,6 +44,6 @@ Ez a projekt egy Spring Boot alapú backend alkalmazás PostgreSQL adatbázissal
 - docker-compose down
 ```
 
-## Docker konténer leállítása
+## Admin belépési adatok
 - Admin felhasználó név: Admin
 - Admin jelszó : Jelszo123!
