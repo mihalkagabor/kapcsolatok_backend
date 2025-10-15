@@ -5,6 +5,7 @@ import org.apache.catalina.User;
 import org.mihalka.kapcsolatok_backend.model.dto.UserCreateDTO;
 import org.mihalka.kapcsolatok_backend.model.dto.UserListDTO;
 import org.mihalka.kapcsolatok_backend.model.dto.UserModifyDTO;
+import org.mihalka.kapcsolatok_backend.model.dto.UserProfileDTO;
 import org.mihalka.kapcsolatok_backend.model.entity.UserEntity;
 import org.mihalka.kapcsolatok_backend.model.enums.UserRole;
 import org.mihalka.kapcsolatok_backend.repository.UserRepository;
@@ -58,9 +59,9 @@ public class UserService {
     }
 
     public void modify(UserModifyDTO dto){
-        if(repository.findByUserName(dto.getUserName()).isEmpty()){
-            throw new IllegalArgumentException("Ez a felhasználó név nem létezik.");
-        }
+//        if(repository.findByUserName(dto.getUserName()).isEmpty()){
+//            throw new IllegalArgumentException("Ez a felhasználó név nem létezik.");
+//        }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
         UserEntity currentUser = userDetails.getUserEntity();
@@ -100,4 +101,16 @@ public class UserService {
             repository.delete(currentUser);
     }
 
+    public UserProfileDTO me() {
+        System.out.println("belépve a servicbe");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("autentikáció kikéerve");
+        CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
+        UserEntity currentUser = userDetails.getUserEntity();
+        System.out.println("user elkészült");
+        UserProfileDTO dto= new UserProfileDTO(currentUser);
+
+
+     return new   UserProfileDTO(currentUser);
+    }
 }

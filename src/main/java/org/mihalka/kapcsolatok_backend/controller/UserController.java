@@ -5,6 +5,7 @@ import org.apache.catalina.User;
 import org.mihalka.kapcsolatok_backend.model.dto.UserCreateDTO;
 import org.mihalka.kapcsolatok_backend.model.dto.UserListDTO;
 import org.mihalka.kapcsolatok_backend.model.dto.UserModifyDTO;
+import org.mihalka.kapcsolatok_backend.model.dto.UserProfileDTO;
 import org.mihalka.kapcsolatok_backend.repository.UserRepository;
 import org.mihalka.kapcsolatok_backend.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,6 @@ public class UserController {
      */
     @PutMapping("/modify")
     public ResponseEntity<String> modifyUser(@RequestBody UserModifyDTO dto) {
-        System.out.println("Controllerbe lépés");
         userService.modify(dto);
         return ResponseEntity.ok("Felhasználó adatai módosítva.");
     }
@@ -56,9 +56,16 @@ public class UserController {
      *  Felhasználó törlése
      * ADMIN bárkit törölhet, USER csak saját magát.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.ok("Felhasználó törölve.");
     }
+    @GetMapping("/me")
+    public ResponseEntity<UserProfileDTO> me() {
+        System.out.println("Belépet a végpontra");
+        UserProfileDTO users = userService.me();
+        return ResponseEntity.ok(users);
+    }
+
 }
