@@ -8,18 +8,25 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+// Spring Bean, ami kezeli a felhasználók betöltését a Security számára
 @Service
-@RequiredArgsConstructor
-public class CustomUserDetailsService  implements UserDetailsService {
+@RequiredArgsConstructor // Lombok annotáció, automatikusan generálja a konstruktor-t a final mezőhöz
+public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository repository;
+    private final UserRepository repository; // A UserRepository az adatbázisból tölti a felhasználót
 
+    // Spring Security hívja ezt a metódust a bejelentkezéskor
+    // username alapján kell visszaadni a UserDetails-t
     @Override
-    public UserDetails loadUserByUsername (String username) {
-        UserEntity user= repository.findByUserName(username)
-                .orElseThrow(()->new UsernameNotFoundException(
-                        "User not found with identifier" + username
+    public UserDetails loadUserByUsername(String username) {
+        // Lekérjük az adott felhasználót az adatbázisból
+        UserEntity user = repository.findByUserName(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "User not found with identifier " + username
                 ));
+
+        // A felhasználói entitást becsomagoljuk CustomUserDetail-be
+        // Ez adja meg a jelszót, username-t és szerepköröket a Security-nek
         return new CustomUserDetail(user);
     }
 

@@ -21,9 +21,9 @@ public class ContactController {
      * Új contact létrehozása
      */
     @PostMapping("/create")
-    public ResponseEntity<Void> create(@RequestBody ContactCreateDTO dto) {
-        service.create(dto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Long> create(@RequestBody ContactCreateDTO dto) {
+        Long contactId = service.create(dto);
+        return ResponseEntity.ok(contactId);
     }
 
     /**

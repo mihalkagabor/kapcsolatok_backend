@@ -14,9 +14,12 @@ public class PhoneNumberListDTO {
     @NotBlank(message = "A típus megadása kötelező")
     private String type;
 
+    private Long contactId;
+
     public PhoneNumberListDTO (PhoneNumberEntity entity) {
         this.id=entity.getId();
         this.phoneNumber=entity.getPhoneNumber();
         this.type=entity.getType();
+        this.contactId=entity.getContact().getId();
     }
 }
