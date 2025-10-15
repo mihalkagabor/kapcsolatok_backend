@@ -29,6 +29,5 @@ public class ContactCreateDTO {
     @Email(message = "Érvényes email címet adj meg")
     private String email;
 
-    private Long userId;
 
 }
