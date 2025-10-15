@@ -15,9 +15,12 @@ import java.util.Date;
 
 @Component
 public class JwtService {
+
+    // Titkos kulcs az alkalmazás konfigurációjából (application.yaml vagy properties)
     @Value("${app.jwt.secret}")
     private String secretKey;
 
+    // Token lejárati ideje milliszekundumban
     @Value("${app.jwt.expirationMs}")
     private long expiration;
 
@@ -26,22 +29,23 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-
+    // JWT token generálása egy adott felhasználóhoz
     public String generateToken(UserEntity user) {
         Date now = new Date();
-        Date expierDate = new Date(now.getTime() + expiration);
+        Date expierDate = new Date(now.getTime() + expiration); // lejárati idő kiszámítása
 
-        String role= user.getRole().name();
+        String role = user.getRole().name(); // felhasználó szerepköre
 
         return Jwts.builder()
-                .setSubject(user.getUserName())
-                .claim("role",role)
-                .setIssuedAt(now)
-                .setExpiration(expierDate)
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                .compact();
+                .setSubject(user.getUserName()) // token "alany" mezője: felhasználónév
+                .claim("role", role) // extra adat: szerepkör
+                .setIssuedAt(now) // kiállítás ideje
+                .setExpiration(expierDate) // lejárati idő
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256) // aláírás
+                .compact(); // token string generálása
     }
 
+    // Felhasználónév kinyerése a tokenből
     public String extractUsername(String token) {
         return getClaims(token).getSubject();
     }
@@ -52,7 +56,7 @@ public class JwtService {
             Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
-                    .parseClaimsJws(token);
+                    .parseClaimsJws(token); // ha hibát dob, érvénytelen a token
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
@@ -65,7 +69,7 @@ public class JwtService {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    // Megnézi, hogy lejárt-e a token
+    // Ellenőrzi, hogy a token lejárt-e
     private boolean isTokenExpired(String token) {
         return getClaims(token).getExpiration().before(new Date());
     }
@@ -79,6 +83,4 @@ public class JwtService {
                 .getBody();
     }
 
-
 }
-

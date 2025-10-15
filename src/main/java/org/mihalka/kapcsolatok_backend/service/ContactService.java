@@ -25,13 +25,15 @@ public class ContactService {
         this.repository = repository;
     }
 
-    public void create(ContactCreateDTO dto) {
+    public Long create(ContactCreateDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
         UserEntity currentUser = userDetails.getUserEntity();
-        ContactEntity contact = new ContactEntity(dto,currentUser);
 
-        repository.save(contact);
+        ContactEntity contact = new ContactEntity(dto,currentUser);
+        ContactEntity savedContact = repository.save(contact);
+
+        return savedContact.getId(); // <-- visszaadjuk az új contact azonosítóját
     }
 
     public List<ContactListDTO> list() {
