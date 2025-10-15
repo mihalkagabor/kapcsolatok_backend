@@ -30,6 +30,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    //User create metódus
     public void create(UserCreateDTO dto) {
         if(repository.findByUserName(dto.getUserName()).isPresent()){
             throw new IllegalArgumentException("Ez a felhasználó név már foglalt.");
@@ -51,12 +52,16 @@ public class UserService {
         repository.save(user);
     }
 
+    //User list metódus
+
     public List<UserListDTO> list() {
         return repository.findAll().stream()
                 .sorted(Comparator.comparing(UserEntity::getUserName))
                 .map(UserListDTO :: new)
                 .toList();
     }
+
+    //User modify metódus
 
     public void modify(UserModifyDTO dto){
 //        if(repository.findByUserName(dto.getUserName()).isEmpty()){
@@ -82,6 +87,8 @@ public class UserService {
 
     }
 
+    //User delete metódus
+
     @Transactional
     public void delete(Long id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -101,15 +108,13 @@ public class UserService {
             repository.delete(currentUser);
     }
 
+
+    //user profile metódus
     public UserProfileDTO me() {
-        System.out.println("belépve a servicbe");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("autentikáció kikéerve");
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
         UserEntity currentUser = userDetails.getUserEntity();
-        System.out.println("user elkészült");
         UserProfileDTO dto= new UserProfileDTO(currentUser);
-
 
      return new   UserProfileDTO(currentUser);
     }
