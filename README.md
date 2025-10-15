@@ -43,3 +43,7 @@ Ez a projekt egy Spring Boot alapú backend alkalmazás PostgreSQL adatbázissal
 ```bash
 - docker-compose down
 ```
+
+## Docker konténer leállítása
+- Admin felhasználó név: Admin
+- Admin jelszó : Jelszo123!

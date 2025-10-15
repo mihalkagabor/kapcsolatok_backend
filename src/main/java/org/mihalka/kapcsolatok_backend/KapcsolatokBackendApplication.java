@@ -8,6 +8,8 @@ public class KapcsolatokBackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(KapcsolatokBackendApplication.class, args);
+
+
     }
 
 }
